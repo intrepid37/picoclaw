@@ -614,7 +614,7 @@ func (t *CronTool) ExecuteJob(ctx context.Context, job *cron.CronJob) string {
 				Context: bus.NewOutboundContext(channel, chatID, ""),
 				Content: output,
 			})
-			return "ok"
+			return "Error: command execution is disabled"
 		}
 
 		args := map[string]any{
@@ -638,6 +638,9 @@ func (t *CronTool) ExecuteJob(ctx context.Context, job *cron.CronJob) string {
 			Context: bus.NewOutboundContext(channel, chatID, ""),
 			Content: output,
 		})
+		if result.IsError {
+			return fmt.Sprintf("Error: %s", result.ForLLM)
+		}
 		return "ok"
 	}
 

@@ -859,6 +859,9 @@ func setupCronTool(
 	if cronTool != nil {
 		cronService.SetOnJob(func(job *cron.CronJob) (string, error) {
 			result := cronTool.ExecuteJob(context.Background(), job)
+			if result != "ok" {
+				return result, fmt.Errorf("cron job execution failed: %s", result)
+			}
 			return result, nil
 		})
 	}
